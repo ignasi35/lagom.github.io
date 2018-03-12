@@ -18,6 +18,15 @@
     }
 }
 
+@renderOldVersion(summary: VersionSummary) = {
+    <h5>@summary.title</h5>
+    @for(version <- versions.find(_.name == summary.name)) {
+        @for(lang <- version.languages) {
+                &nbsp;&nbsp;@toTitleCase(lang.language): <a href="@ctx.path/documentation/@version.name/@lang.language/Home.html">Reference manual</a> and <a href="@ctx.path/documentation/@version.name/@lang.language/api/index.html">API docs</a>.<br/>
+            }
+    }
+}
+
 @renderContent(communityContents: Seq[CommunityContent]) = {
     <ul>
     @for(cc <- communityContents) {
@@ -52,16 +61,13 @@
 
     @if(oldVersions) {
         <h1>Old versions</h1>
-
-        <p>
-            Old versions are no longer maintained.
-        </p>
-
+        <p>Old versions are no longer maintained.</p>
         @for(oldVersion <- oldVersions) {
-            @renderVersion(oldVersion)
+            @renderOldVersion(oldVersion)
         }
     }
 
+    <br/>
     @if(communityContents) {
         <h1>Community Content</h1>
 
